@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ClassLibrary.ArduinoData;
 using Microsoft.AspNetCore.Mvc;
 using TestNetCore2.Services.IService;
 
@@ -18,11 +19,12 @@ namespace TestNetCore2.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetColor()
+        [Route("/{deviceId}")]
+        public async Task<IActionResult> GetColor(int deviceId)
         {
             try
             {
-                var response = await _colorService.GetColor(1);
+                var response = await _colorService.GetColor(deviceId);
                 return Json(response);
             }
             catch (Exception ex)
@@ -31,11 +33,12 @@ namespace TestNetCore2.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> SetColor()
+        [Route("/{deviceId}")]
+        public async Task<IActionResult> SetColor([FromBody] ARGBB color,int deviceId)
         {
             try
             {
-                var response = await _colorService.SetColor(1);
+                var response = await _colorService.SetColor(deviceId, color);
                 return Json(response);
             }
             catch (Exception ex)

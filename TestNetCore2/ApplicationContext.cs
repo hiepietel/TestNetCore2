@@ -13,5 +13,6 @@ namespace TestNetCore2
         { }
 
         public DbSet<Device> Device { get; set; }
+        public DbSet<TemperatureHistory> TemperatureHistory { get; set; }
     }
 }

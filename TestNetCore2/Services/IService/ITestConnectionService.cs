@@ -11,7 +11,6 @@ namespace TestNetCore2.Services.IService
     public interface ITestConnectionService : IService
     {
         public Task CheckDevice();
-
         public Task<Device> GetDeviceInfo();
         public Task<List<ADeviceInfo>> GetAllDeviceInfo();
     }

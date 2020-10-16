@@ -1,4 +1,5 @@
-﻿using ClassLibrary.Model;
+﻿using ClassLibrary.ArduinoData;
+using ClassLibrary.Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,14 +14,20 @@ using TestNetCore2.Services.IService;
 
 namespace TestNetCore2.Services
 {
-    public class ColorService : IColorService
+    public class ColorService : CommonService, IColorService
     {
-        public async Task<DeviceRGB> GetColor(int deviceId)
+        private readonly ApplicationContext dbContext;
+        public ColorService(ApplicationContext _dbContext)
         {
-            HttpClient client = GetHttpClient("http://192.168.0.189/");
+            dbContext = _dbContext;
+        }
+        public async Task<ARGBB> GetColor(int deviceId)
+        {
+            var device = dbContext.Device.Single(x => x.Id == deviceId);
+            HttpClient client = GetHttpClient(device.Ip);
             var response = await client.GetAsync("rgb");
             var responseString = response.Content.ReadAsStringAsync().Result;
-            var rgbb = JsonConvert.DeserializeObject<DeviceRGB>(responseString);
+            var rgbb = JsonConvert.DeserializeObject<ARGBB>(responseString);
             return rgbb;
         }
         public async Task<List<Color>> GetAllColors()
@@ -30,30 +37,21 @@ namespace TestNetCore2.Services
                 .ToList();
             return colorList;
         }
-        public async Task<bool> SetColor(int deviceId)
+        public async Task<bool> SetColor(int deviceId, ARGBB color)
         {
-            HttpClient client = GetHttpClient("http://192.168.0.189/");
-            var data = new DeviceRGB
-            {
-                Red = 255, Blue = 255, Green= 255, Brightness =255
-            };
-            var dataAsString = JsonConvert.SerializeObject(data);
+            var device = dbContext.Device.Single(x => x.Id == deviceId);
+            HttpClient client = GetHttpClient(device.Ip);
+            //var data = new ARGBB
+            //{
+            //    Red = 255, Blue = 255, Green= 255, Brightness = 255
+            //};
+            var dataAsString = JsonConvert.SerializeObject(color);
             var content = new StringContent(dataAsString);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
 
             await client.PostAsync("rgb", content);
             return true;
-        }
-
-        private HttpClient GetHttpClient(string uriAddress)
-        {
-            var uri = new Uri(uriAddress);
-            var networkCredential = new NetworkCredential();
-            var credentialsCache = new CredentialCache { { uri, "NTLM", networkCredential } };
-            var handler = new HttpClientHandler { Credentials = credentialsCache };
-            var client = new HttpClient(handler) { BaseAddress = uri };
-            return client;
         }
     }
 }
