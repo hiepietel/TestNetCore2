@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ClassLibrary.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace TestNetCore2
     {
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         { }
+
+        public DbSet<Device> Device { get; set; }
     }
 }

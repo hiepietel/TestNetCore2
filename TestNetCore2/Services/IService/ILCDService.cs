@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 
 namespace TestNetCore2.Services.IService
 {
-    public class ILCDService
+    public interface ILCDService : IService
     {
+        public Task<bool> SetText();
+        public Task<bool> GetText();
     }
 }

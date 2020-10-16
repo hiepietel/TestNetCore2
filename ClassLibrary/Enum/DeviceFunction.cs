@@ -7,6 +7,7 @@ namespace ClassLibrary.Enum
     public enum DeviceFunction
     {
         RGB,
-        TEMP
+        TEMP,
+        LCD
     }
 }

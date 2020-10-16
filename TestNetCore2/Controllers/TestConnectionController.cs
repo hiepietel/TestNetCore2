@@ -32,6 +32,20 @@ namespace TestNetCore2.Controllers
 
         }
         [HttpGet]
+        [Route("all")]
+        public async Task<IActionResult> GetAllDeviceInfo()
+        {
+            try
+            {
+                var ret = await _testConnectionService.GetAllDeviceInfo();
+                return Json(ret);
+            }
+            catch (Exception ex)
+            {
+                return Json(false);
+            }
+        }
+        [HttpGet]
         [Route("info")]
         public async Task<IActionResult> GetDeviceInfo()
         {
@@ -44,7 +58,6 @@ namespace TestNetCore2.Controllers
             {
                 return Json(false);
             }
-
         }
     }
 }

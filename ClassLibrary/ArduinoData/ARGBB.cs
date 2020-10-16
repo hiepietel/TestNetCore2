@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ClassLibrary.Model
+namespace ClassLibrary.ArduinoData
 {
-    public class RGBB
+    public class ARGBB
     {
         public int Red { get; set; }
         public int Green { get; set; }
