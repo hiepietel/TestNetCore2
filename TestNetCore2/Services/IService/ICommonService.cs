@@ -9,6 +9,7 @@ namespace TestNetCore2.Services.IService
 {
     public interface ICommonService : IService
     {
-        public HttpClient GetHttpClient(string uriAddress);
+        public Task<HttpClient> GetHttpClient(string uriAddress);
+        public Task<StringContent> DataToStringContent(object data);
     }
 }

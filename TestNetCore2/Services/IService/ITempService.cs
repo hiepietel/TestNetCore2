@@ -9,6 +9,6 @@ namespace TestNetCore2.Services.IService
     public interface ITempService
     {
         public Task<float> GetTemp();
-        public Task<List<TemperatureHistory>> GetTempAll();
+        public Task<List<TemperatureHistory>> GetTemperatureHistory();
     }
 }

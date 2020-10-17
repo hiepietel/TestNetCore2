@@ -31,12 +31,12 @@ namespace TestNetCore2.Controllers
             }
         }
         [HttpGet]
-        [Route("all")]
-        public async Task<IActionResult> GetTempAll()
+        [Route("history")]
+        public async Task<IActionResult> GetTemperatureHistory()
         {
             try
             {
-                var tempList = await _tempService.GetTempAll();
+                var tempList = await _tempService.GetTemperatureHistory();
                 return Json(tempList);
             }
             catch (Exception ex)

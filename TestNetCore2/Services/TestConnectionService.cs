@@ -1,55 +1,39 @@
 ﻿using ClassLibrary;
 using ClassLibrary.ArduinoData;
 using ClassLibrary.Model;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using TestNetCore2.Services.IService;
 
 namespace TestNetCore2.Services
 {
-    public class TestConnectionService : ITestConnectionService
+    public class TestConnectionService : CommonService, ITestConnectionService
     {
-        ApplicationContext DbContext;
+        ApplicationContext dbContext;
         public TestConnectionService(ApplicationContext _applicationContext)
         {
-            DbContext = _applicationContext;
-        }
-
-        public async Task CheckDevice()
-        {
-            string uriAddress = "http://192.168.0.165/";
-            //string login = await GetConfigValueAsync<string>("SSRSuser");
-            //string password = await GetConfigValueAsync<string>("SSRSpass");
-            var uri = new Uri(uriAddress);
-
-            var networkCredential = new NetworkCredential();
-            var credentialsCache = new CredentialCache { { uri, "NTLM", networkCredential } };
-            var handler = new HttpClientHandler { Credentials = credentialsCache };
-            var client = new HttpClient(handler) { BaseAddress = uri };
-            var response = await client.GetAsync("");
-            var responseString = response.Content.ReadAsStringAsync();
+            dbContext = _applicationContext;
         }
         public async Task<List<ADeviceInfo>> GetAllDeviceInfo()
         {
-            var Iplist = new List<string>();
-            Iplist.Add("192.168.0.102");
-            Iplist.Add("192.168.0.190");
-            Iplist.Add("192.168.0.189");
-            var deviceInfos = new List<ADeviceInfo>();
-            foreach (string ip in Iplist)
+            var aDeviceInfos = new List<ADeviceInfo>();
+            var deviceInfos = await dbContext.Device.ToListAsync();
+            foreach (var device in deviceInfos)
             {
                 try
                 {
-                    HttpClient client = GetHttpClient("http://" + ip);
+                    HttpClient client = await GetHttpClient(device.Ip);
                     var response = await client.GetAsync("/info");
                     var responseString = response.Content.ReadAsStringAsync().Result;
-                    var device = JsonConvert.DeserializeObject<ADeviceInfo>(responseString);
-                    deviceInfos.Add(device);
+                    var responseDevice = JsonConvert.DeserializeObject<ADeviceInfo>(responseString);                 
+                    aDeviceInfos.Add(responseDevice);
                 }
                 catch (Exception ex)
                 {
@@ -57,27 +41,23 @@ namespace TestNetCore2.Services
                     
                 }
             }
-            return deviceInfos;
+            return aDeviceInfos;
         }
-        public async Task<Device> GetDeviceInfo()
+        public async Task<Device> GetDeviceInfo(int deviceId)
         {
-            HttpClient client = GetHttpClient("http://192.168.0.165/");
+            var device = await dbContext.Device.SingleAsync(x => x.Id == deviceId);
+            HttpClient client = await GetHttpClient(device.Ip);
             var response = await client.GetAsync("info");
             var responseString = response.Content.ReadAsStringAsync().Result;
-            var device = JsonConvert.DeserializeObject<Device>(responseString);
-            return device;
+            return JsonConvert.DeserializeObject<Device>(responseString);
+        }
+        public async Task<bool> SetDeviceInfo(int deviceId, ADeviceInfo aDeviceInfo){
+            var device = await dbContext.Device.SingleAsync(x => x.Id == deviceId);
+            HttpClient client = await GetHttpClient(device.Ip);
+            var response = await client.PostAsync("info", await DataToStringContent(aDeviceInfo));
+            return true;
         }
 
-
-        private HttpClient GetHttpClient(string uriAddress)
-        {
-            var uri = new Uri(uriAddress);
-            var networkCredential = new NetworkCredential();
-            var credentialsCache = new CredentialCache { { uri, "NTLM", networkCredential } };
-            var handler = new HttpClientHandler { Credentials = credentialsCache };
-            var client = new HttpClient(handler) { BaseAddress = uri };
-            return client;
-        }
 
     }
 }

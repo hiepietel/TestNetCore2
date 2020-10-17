@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ClassLibrary.ArduinoData;
 using Microsoft.AspNetCore.Mvc;
 using TestNetCore2.Services.IService;
 
@@ -15,21 +16,6 @@ namespace TestNetCore2.Controllers
         public TestConnectionController(ITestConnectionService testConnectionService)
         {
             _testConnectionService = testConnectionService;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            try
-            {
-                await _testConnectionService.CheckDevice();
-                return Json(true);
-            }
-            catch (Exception ex)
-            {
-                return Json(false);
-            }
-
         }
         [HttpGet]
         [Route("all")]
@@ -46,13 +32,27 @@ namespace TestNetCore2.Controllers
             }
         }
         [HttpGet]
-        [Route("info")]
-        public async Task<IActionResult> GetDeviceInfo()
+        [Route("{DeviceId}")]
+        public async Task<IActionResult> GetDeviceInfo(int DeviceId)
         {
             try
             {
-                var ret = await _testConnectionService.GetDeviceInfo();
+                var ret = await _testConnectionService.GetDeviceInfo(DeviceId);
                 return Json(ret);
+            }
+            catch (Exception ex)
+            {
+                return Json(false);
+            }
+        }
+        [HttpPost]
+        [Route("{DeviceId}")]
+        public async Task<IActionResult> SetDeviceInfo(int DeviceId, ADeviceInfo aDeviceInfo)
+        {
+            try
+            {
+                await _testConnectionService.SetDeviceInfo(DeviceId, aDeviceInfo);
+                return Json(true);
             }
             catch (Exception ex)
             {

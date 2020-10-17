@@ -10,8 +10,9 @@ namespace TestNetCore2.Services.IService
 {
     public interface ITestConnectionService : IService
     {
-        public Task CheckDevice();
-        public Task<Device> GetDeviceInfo();
+        public Task<Device> GetDeviceInfo(int deviceId);
+        public Task<bool> SetDeviceInfo(int deviceId, ADeviceInfo aDeviceInfo);
         public Task<List<ADeviceInfo>> GetAllDeviceInfo();
+
     }
 }

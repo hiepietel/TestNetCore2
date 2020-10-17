@@ -23,24 +23,24 @@ namespace TestNetCore2.Services
         public async Task<float> GetTemp()
         {
             var tempDevice = await dbContext.Device.Where(x => x.Name == "TEMP").FirstOrDefaultAsync(); ;
-            var client = GetHttpClient(tempDevice.Ip);
+            var client = await GetHttpClient(tempDevice.Ip);
             var response = await client.GetAsync("temp");
             var responseString = response.Content.ReadAsStringAsync().Result;
             var aTemp = JsonConvert.DeserializeObject<ATemp>(responseString);
             var temp = new TemperatureHistory()
             {
                 DeviceId = tempDevice.Id,
-                Temp = aTemp.Temp,
+                Temperature = aTemp.Temp,
                 Date = DateTime.Now
             };
-            await dbContext.Temperature.AddAsync(temp);
+            await dbContext.TemperatureHistory.AddAsync(temp);
             await dbContext.SaveChangesAsync();
             return aTemp.Temp;
         }
 
-        public async Task<List<TemperatureHistory>> GetTempAll()
+        public async Task<List<TemperatureHistory>> GetTemperatureHistory()
         {
-            return await dbContext.Temperature.ToListAsync();
+            return await dbContext.TemperatureHistory.ToListAsync();
         }
 
 

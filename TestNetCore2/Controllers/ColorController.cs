@@ -19,7 +19,7 @@ namespace TestNetCore2.Controllers
         }
 
         [HttpGet]
-        [Route("/{deviceId}")]
+        [Route("{deviceId}")]
         public async Task<IActionResult> GetColor(int deviceId)
         {
             try
@@ -33,7 +33,7 @@ namespace TestNetCore2.Controllers
             }
         }
         [HttpPost]
-        [Route("/{deviceId}")]
+        [Route("{deviceId}")]
         public async Task<IActionResult> SetColor([FromBody] ARGBB color,int deviceId)
         {
             try
@@ -60,8 +60,20 @@ namespace TestNetCore2.Controllers
             {
                 return Json(false);
             }
-        } 
-
+        }
+        [HttpGet]
+        [Route("history")]
+        public async Task<IActionResult> GetColorHistory()
+        {
+            try
+            {
+                return Json(await _colorService.GetColorHistory());
+            }
+            catch (Exception ex)
+            {
+                return Json(false);
+            }
+        }
 
     }
 }

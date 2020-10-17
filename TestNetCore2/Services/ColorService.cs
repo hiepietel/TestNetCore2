@@ -1,5 +1,6 @@
 ﻿using ClassLibrary.ArduinoData;
 using ClassLibrary.Model;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace TestNetCore2.Services
         public async Task<ARGBB> GetColor(int deviceId)
         {
             var device = dbContext.Device.Single(x => x.Id == deviceId);
-            HttpClient client = GetHttpClient(device.Ip);
+            HttpClient client = await GetHttpClient(device.Ip);
             var response = await client.GetAsync("rgb");
             var responseString = response.Content.ReadAsStringAsync().Result;
             var rgbb = JsonConvert.DeserializeObject<ARGBB>(responseString);
@@ -40,18 +41,26 @@ namespace TestNetCore2.Services
         public async Task<bool> SetColor(int deviceId, ARGBB color)
         {
             var device = dbContext.Device.Single(x => x.Id == deviceId);
-            HttpClient client = GetHttpClient(device.Ip);
-            //var data = new ARGBB
-            //{
-            //    Red = 255, Blue = 255, Green= 255, Brightness = 255
-            //};
-            var dataAsString = JsonConvert.SerializeObject(color);
-            var content = new StringContent(dataAsString);
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-
-            await client.PostAsync("rgb", content);
+            HttpClient client = await GetHttpClient(device.Ip);
+            var result  = await client.PostAsync("rgb", await DataToStringContent(color));
+            var colorHistory = new ColorHistory()
+            {
+                DeviceId = device.Id,
+                Red = color.Red,
+                Green = color.Green,
+                Blue = color.Blue,
+                Brightness = color.Brightness,
+                Date = DateTime.Now
+            };
+            _ = dbContext.ColorHistory.AddAsync(colorHistory);
+            _ = dbContext.SaveChangesAsync();
             return true;
+
+        }
+
+        public async Task<List<ColorHistory>> GetColorHistory()
+        {
+            return await dbContext.ColorHistory.ToListAsync();
         }
     }
 }

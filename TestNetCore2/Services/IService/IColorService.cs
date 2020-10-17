@@ -13,6 +13,7 @@ namespace TestNetCore2.Services.IService
         public Task<bool> SetColor(int deviceId, ARGBB color);
         public Task<ARGBB> GetColor(int deviceId);
         public Task<List<Color>> GetAllColors();
+        public Task<List<ColorHistory>> GetColorHistory();
 
     }
 }
