@@ -10,10 +10,10 @@ namespace TestNetCore2.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class TestConnectionController : Controller
+    public class DeviceController : Controller
     {
-        private readonly ITestConnectionService _testConnectionService;
-        public TestConnectionController(ITestConnectionService testConnectionService)
+        private readonly IDeviceService _testConnectionService;
+        public DeviceController(IDeviceService testConnectionService)
         {
             _testConnectionService = testConnectionService;
         }

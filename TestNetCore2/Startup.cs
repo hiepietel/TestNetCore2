@@ -34,7 +34,7 @@ namespace TestNetCore2
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<ITestConnectionService, TestConnectionService>();
+            services.AddTransient<IDeviceService, DeviceService>();
             services.AddTransient<IColorService, ColorService>();
             services.AddTransient<ITempService, TempService>();
             // In production, the React files will be served from this directory

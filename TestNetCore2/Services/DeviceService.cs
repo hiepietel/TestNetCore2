@@ -14,10 +14,10 @@ using TestNetCore2.Services.IService;
 
 namespace TestNetCore2.Services
 {
-    public class TestConnectionService : CommonService, ITestConnectionService
+    public class DeviceService : CommonService, IDeviceService
     {
         ApplicationContext dbContext;
-        public TestConnectionService(ApplicationContext _applicationContext)
+        public DeviceService(ApplicationContext _applicationContext)
         {
             dbContext = _applicationContext;
         }

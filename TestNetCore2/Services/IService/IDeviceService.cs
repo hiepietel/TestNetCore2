@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TestNetCore2.Services.IService
 {
-    public interface ITestConnectionService : IService
+    public interface IDeviceService : IService
     {
         public Task<Device> GetDeviceInfo(int deviceId);
         public Task<bool> SetDeviceInfo(int deviceId, ADeviceInfo aDeviceInfo);
