@@ -43,19 +43,22 @@ namespace TestNetCore2.Services
             var device = dbContext.Device.Single(x => x.Id == deviceId);
             HttpClient client = await GetHttpClient(device.Ip);
             var result  = await client.PostAsync("rgb", await DataToStringContent(color));
-            var colorHistory = new ColorHistory()
+            if (result.IsSuccessStatusCode)
             {
-                DeviceId = device.Id,
-                Red = color.Red,
-                Green = color.Green,
-                Blue = color.Blue,
-                Brightness = color.Brightness,
-                Date = DateTime.Now
-            };
-            _ = dbContext.ColorHistory.AddAsync(colorHistory);
-            _ = dbContext.SaveChangesAsync();
-            return true;
-
+                var colorHistory = new ColorHistory()
+                {
+                    DeviceId = device.Id,
+                    Red = color.Red,
+                    Green = color.Green,
+                    Blue = color.Blue,
+                    Brightness = color.Brightness,
+                    Date = DateTime.Now
+                };
+                dbContext.ColorHistory.Add(colorHistory);
+                await dbContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
 
         public async Task<List<ColorHistory>> GetColorHistory()
