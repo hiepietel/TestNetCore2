@@ -8,6 +8,7 @@ import Todo from './components/Todo/Todo'
 import './custom.css'
 import { Color } from './components/Color';
 import SnakeApp from './components/Snake/SnakeApp';
+import Device from './components/Device';
 
 export default class App extends Component {
     static displayName = App.name;
@@ -21,6 +22,7 @@ export default class App extends Component {
                 <Route path="/color" component={Color} />
                 <Route path="/todo" component={Todo} />
                 <Route path="/snake" component={SnakeApp} />
+                <Route path="/device" component={Device} />
             </Layout>
         );
     }

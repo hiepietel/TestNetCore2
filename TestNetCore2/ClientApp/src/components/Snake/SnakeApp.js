@@ -138,9 +138,6 @@ class SnakeApp extends Component {
             <div className="game-area">
                 <Snake snakeDots={this.state.snakeDots} />
                 <Food dot={this.state.food} />
-                <div className="snake-dot" style={{ top: 0, left: 0 }}> </div>
-                <div className="snake-dot" style={{ top: 0, left: '2%' }}> </div>
-                <div className="snake-dot" style={{ top: 0, left: '4%' }}> </div>
             </div>);
     }
 }

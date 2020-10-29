@@ -37,6 +37,7 @@ namespace TestNetCore2
             services.AddTransient<IDeviceService, DeviceService>();
             services.AddTransient<IColorService, ColorService>();
             services.AddTransient<ITempService, TempService>();
+            services.AddTransient<ICovidService, CovidService>();
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
