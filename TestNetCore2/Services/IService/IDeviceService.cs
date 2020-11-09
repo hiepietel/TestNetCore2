@@ -1,5 +1,6 @@
 ﻿using ClassLibrary;
 using ClassLibrary.ArduinoData;
+using ClassLibrary.DTO;
 using ClassLibrary.Model;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace TestNetCore2.Services.IService
     {
         public Task<Device> GetDeviceInfo(int deviceId);
         public Task<bool> SetDeviceInfo(int deviceId, ADeviceInfo aDeviceInfo);
-        public Task<List<ADeviceInfo>> GetAllDeviceInfo();
+        public Task<List<DeviceInfoDTO>> GetAllDeviceInfo();
 
     }
 }

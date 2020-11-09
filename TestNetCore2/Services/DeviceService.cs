@@ -1,5 +1,6 @@
 ﻿using ClassLibrary;
 using ClassLibrary.ArduinoData;
+using ClassLibrary.DTO;
 using ClassLibrary.Model;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -21,27 +22,38 @@ namespace TestNetCore2.Services
         {
             dbContext = _applicationContext;
         }
-        public async Task<List<ADeviceInfo>> GetAllDeviceInfo()
+        public async Task<List<DeviceInfoDTO>> GetAllDeviceInfo()
         {
-            var aDeviceInfos = new List<ADeviceInfo>();
             var deviceInfos = await dbContext.Device.ToListAsync();
+            var deviceInfoDTOs = new List<DeviceInfoDTO>();
             foreach (var device in deviceInfos)
             {
+                var deviceInfoDTO = new DeviceInfoDTO()
+                {
+                    Id = device.Id,
+                    Description = device.Description,
+                    Function = device.Function,
+                    Name = device.Name,
+                    IsAlive = false
+                };
                 try
                 {
                     HttpClient client = await GetHttpClient(device.Ip);
                     var response = await client.GetAsync("/info");
                     var responseString = response.Content.ReadAsStringAsync().Result;
-                    var responseDevice = JsonConvert.DeserializeObject<ADeviceInfo>(responseString);                 
-                    aDeviceInfos.Add(responseDevice);
+                    var responseDevice = JsonConvert.DeserializeObject<ADeviceInfo>(responseString);
+                    deviceInfoDTO.Ip = responseDevice.Ip;
+                    deviceInfoDTO.IsAlive = true;
+                    
                 }
                 catch (Exception ex)
                 {
 
                     
                 }
+                deviceInfoDTOs.Add(deviceInfoDTO);
             }
-            return aDeviceInfos;
+            return deviceInfoDTOs;
         }
         public async Task<Device> GetDeviceInfo(int deviceId)
         {

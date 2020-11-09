@@ -9,6 +9,7 @@ import './custom.css'
 import { Color } from './components/Color';
 import SnakeApp from './components/Snake/SnakeApp';
 import Device from './components/Device';
+import TicTacToe from './components/TicTacToe/TicTacToe';
 
 export default class App extends Component {
     static displayName = App.name;
@@ -23,6 +24,8 @@ export default class App extends Component {
                 <Route path="/todo" component={Todo} />
                 <Route path="/snake" component={SnakeApp} />
                 <Route path="/device" component={Device} />
+                <Route path="/tictactoe" component={TicTacToe} />
+
             </Layout>
         );
     }
