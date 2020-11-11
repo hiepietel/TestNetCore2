@@ -9,6 +9,6 @@ namespace ClassLibrary.Model
         public string Ip { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public DeviceFunction Function { get; set; }
+        public DeviceFunction Func { get; set; }
     }
 }

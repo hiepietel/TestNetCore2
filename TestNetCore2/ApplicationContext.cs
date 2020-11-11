@@ -17,8 +17,8 @@ namespace TestNetCore2
         public DbSet<ColorHistory> ColorHistory { get; set; }
         /*
   Insert into Device values ('192.168.0.102', 'TEMP', 'Temperature Device', 1)
-  Insert into Device values ('192.168.0.189', 'RGB', 'RGB Color Device', 0)
-  Insert into Device values ('192.168.0.102', 'LCD', 'LCD Device', 2)
+  Insert into Device values ('192.168.0.171', 'RGB', 'RGB Color Device', 0)
+  Insert into Device values ('192.168.0.124', 'RGB', 'RGB Table Device', 2)
          */
     }
 }

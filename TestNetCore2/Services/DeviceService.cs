@@ -32,7 +32,7 @@ namespace TestNetCore2.Services
                 {
                     Id = device.Id,
                     Description = device.Description,
-                    Function = device.Function,
+                    Function = device.Func,
                     Name = device.Name,
                     IsAlive = false
                 };
