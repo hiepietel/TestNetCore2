@@ -19,7 +19,7 @@ namespace TestNetCore2
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            ConnectionString = Configuration.GetValue<string>("db");
+            
         }
 
         public IConfiguration Configuration { get; }
@@ -27,7 +27,14 @@ namespace TestNetCore2
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+#if (DEBUG || RELEASE)
+            ConnectionString = Configuration.GetValue<string>("db");
+            services.AddDbContext<ApplicationContext>(c => c.UseMySQL(ConnectionString));
+#elif DEBUGMYSQL
+            ConnectionString = Configuration.GetValue<string>("mysqldb");
             services.AddDbContext<ApplicationContext>(c => c.UseSqlServer(ConnectionString, opt => opt.EnableRetryOnFailure(3)));
+#endif
+
             services.AddControllersWithViews();
             services.AddSwaggerGen(c =>
             {
