@@ -33,6 +33,20 @@ namespace TestNetCore2.Controllers
             }
         }
         [HttpPost]
+        [Route("all")]
+        public async Task<IActionResult> SetColorToAll([FromBody] ARGBB color)
+        {
+            try
+            {
+                var response = await _colorService.SetColorToAll(color);
+                return Json(response);
+            }
+            catch (Exception ex)
+            {
+                return Json(false);
+            }
+        }
+        [HttpPost]
         [Route("{deviceId}")]
         public async Task<IActionResult> SetColor([FromBody] ARGBB color,int deviceId)
         {

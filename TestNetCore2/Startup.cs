@@ -29,10 +29,11 @@ namespace TestNetCore2
         {
 #if (DEBUG || RELEASE)
             ConnectionString = Configuration.GetValue<string>("db");
-            services.AddDbContext<ApplicationContext>(c => c.UseMySQL(ConnectionString));
+            services.AddDbContext<ApplicationContext>(c => c.UseSqlServer(ConnectionString, opt => opt.EnableRetryOnFailure(3)));
+
 #elif DEBUGMYSQL
             ConnectionString = Configuration.GetValue<string>("mysqldb");
-            services.AddDbContext<ApplicationContext>(c => c.UseSqlServer(ConnectionString, opt => opt.EnableRetryOnFailure(3)));
+            services.AddDbContext<ApplicationContext>(c => c.UseMySQL(ConnectionString));
 #endif
 
             services.AddControllersWithViews();

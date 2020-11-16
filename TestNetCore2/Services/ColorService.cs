@@ -38,6 +38,33 @@ namespace TestNetCore2.Services
                 .ToList();
             return colorList;
         }
+        public async Task<bool> SetColorToAll(ARGBB color)
+        {
+            var devices = await dbContext.Device.Where(x => x.Func == ClassLibrary.Enum.DeviceFunction.RGB).ToListAsync();
+            if (devices.Count == 0) return false;
+            var colorHistoryList = new List<ColorHistory>();
+            foreach (var device in devices)
+            {
+                HttpClient client = await GetHttpClient(device.Ip);
+                var result = await client.PostAsync("rgb", await DataToStringContent(color));
+                if (result.IsSuccessStatusCode)
+                {
+                    var colorHistory = new ColorHistory()
+                    {
+                        DeviceId = device.Id,
+                        Red = color.Red,
+                        Green = color.Green,
+                        Blue = color.Blue,
+                        Brightness = color.Brightness,
+                        Date = DateTime.Now
+                    };
+                    colorHistoryList.Add(colorHistory);
+                }
+            }
+            await dbContext.AddRangeAsync(colorHistoryList);
+            await dbContext.SaveChangesAsync();
+            return true;
+        }
         public async Task<bool> SetColor(int deviceId, ARGBB color)
         {
             var device = dbContext.Device.Single(x => x.Id == deviceId);
@@ -54,7 +81,7 @@ namespace TestNetCore2.Services
                     Brightness = color.Brightness,
                     Date = DateTime.Now
                 };
-                dbContext.ColorHistory.Add(colorHistory);
+                await dbContext.ColorHistory.AddAsync(colorHistory);
                 await dbContext.SaveChangesAsync();
                 return true;
             }

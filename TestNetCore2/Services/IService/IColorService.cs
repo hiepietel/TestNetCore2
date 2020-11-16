@@ -11,6 +11,7 @@ namespace TestNetCore2.Services.IService
     public interface IColorService : IService
     {
         public Task<bool> SetColor(int deviceId, ARGBB color);
+        public Task<bool> SetColorToAll(ARGBB color);
         public Task<ARGBB> GetColor(int deviceId);
         public Task<List<Color>> GetAllColors();
         public Task<List<ColorHistory>> GetColorHistory();

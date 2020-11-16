@@ -19,8 +19,7 @@ export class Color extends Component {
     PostColor = (color) => {
         console.log(color)
         const colorToSet = { Red: color.rgb.r, Green: color.rgb.g, Blue: color.rgb.b, Brightness: 255 };
-        const response = axios.post('Color/2', colorToSet);
-        axios.post('Color/3', colorToSet);
+        const response = axios.post('Color/all', colorToSet);
     };
     static renderAllColors(allColors) {
         return (
