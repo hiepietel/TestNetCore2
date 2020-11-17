@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Configurations>Debug;Release;DebugMySQL</Configurations>
+    <Configurations>Debug;Release;DebugMySQL;ReleaseMySQL</Configurations>
   </PropertyGroup>
 
 </Project>

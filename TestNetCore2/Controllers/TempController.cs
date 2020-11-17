@@ -11,8 +11,8 @@ namespace TestNetCore2.Controllers
     [Route("[controller]")]
     public class TempController : Controller
     {
-        private readonly ITempService _tempService;
-        public TempController(ITempService tempService)
+        private readonly ITemperatureService _tempService;
+        public TempController(ITemperatureService tempService)
         {
             _tempService = tempService;
         }
@@ -21,7 +21,7 @@ namespace TestNetCore2.Controllers
         {
             try
             {
-                var temp = await _tempService.GetTemp();
+                var temp = await _tempService.GetTemperature();
                 return Json(temp);
             }
             catch (Exception ex)

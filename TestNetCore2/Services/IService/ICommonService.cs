@@ -11,5 +11,6 @@ namespace TestNetCore2.Services.IService
     {
         public Task<HttpClient> GetHttpClient(string uriAddress);
         public Task<StringContent> DataToStringContent(object data);
+        public Task<T> StringContentToData<T>(HttpResponseMessage response);
     }
 }

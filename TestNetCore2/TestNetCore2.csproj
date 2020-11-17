@@ -8,10 +8,12 @@
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
     <UserSecretsId>b8363440-df8d-46a2-8fa0-d52c17db596c</UserSecretsId>
-    <Configurations>Debug;Release;DebugMySQL</Configurations>
+    <Configurations>Debug;Release;DebugMySQL;ReleaseMySQL</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Hangfire" Version="1.7.17" />
+    <PackageReference Include="Hangfire.MemoryStorage" Version="1.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.1" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="2.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
