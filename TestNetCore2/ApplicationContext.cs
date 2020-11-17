@@ -15,6 +15,7 @@ namespace TestNetCore2
         public DbSet<Device> Device { get; set; }
         public DbSet<TemperatureHistory> TemperatureHistory { get; set; }
         public DbSet<ColorHistory> ColorHistory { get; set; }
+        public DbSet<DeviceHistory> DeviceHistory { get; set; }
         /*
   Insert into Device values ('192.168.0.102', 'TEMP', 'Temperature Device', 1)
   Insert into Device values ('192.168.0.171', 'RGB', 'RGB Color Device', 0)

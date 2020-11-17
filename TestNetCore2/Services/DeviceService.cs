@@ -40,16 +40,15 @@ namespace TestNetCore2.Services
                 {
                     HttpClient client = await GetHttpClient(device.Ip);
                     var response = await client.GetAsync("/info");
-                    var responseString = response.Content.ReadAsStringAsync().Result;
-                    var responseDevice = JsonConvert.DeserializeObject<ADeviceInfo>(responseString);
+                    var responseDevice = await StringContentToData<ADeviceInfo>(response);
                     deviceInfoDTO.Ip = responseDevice.Ip;
                     deviceInfoDTO.IsAlive = true;
-                    
+
                 }
                 catch (Exception ex)
                 {
 
-                    
+
                 }
                 deviceInfoDTOs.Add(deviceInfoDTO);
             }
@@ -63,7 +62,8 @@ namespace TestNetCore2.Services
             var responseString = response.Content.ReadAsStringAsync().Result;
             return JsonConvert.DeserializeObject<Device>(responseString);
         }
-        public async Task<bool> SetDeviceInfo(int deviceId, ADeviceInfo aDeviceInfo){
+        public async Task<bool> SetDeviceInfo(int deviceId, ADeviceInfo aDeviceInfo)
+        {
             var device = await dbContext.Device.SingleAsync(x => x.Id == deviceId);
             HttpClient client = await GetHttpClient(device.Ip);
             var response = await client.PostAsync("info", await DataToStringContent(aDeviceInfo));

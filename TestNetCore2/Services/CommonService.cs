@@ -27,6 +27,14 @@ namespace TestNetCore2.Services
             url = url.StartsWith("http://") ? url : "http://" + url;
             return url.EndsWith("/") ? url : url + "/";
         }
+        //TODO - add StringContetToData Generic
+        public async Task<T> StringContentToData<T>(HttpResponseMessage response)
+        {
+            var responseString = response.Content.ReadAsStringAsync().Result;
+            var toReturn = JsonConvert.DeserializeObject<T>(responseString);
+            return toReturn;
+        }
+
         public async Task<StringContent> DataToStringContent(object data)
         {
             var dataAsString = JsonConvert.SerializeObject(data);

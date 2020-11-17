@@ -27,8 +27,7 @@ namespace TestNetCore2.Services
             var device = dbContext.Device.Single(x => x.Id == deviceId);
             HttpClient client = await GetHttpClient(device.Ip);
             var response = await client.GetAsync("rgb");
-            var responseString = response.Content.ReadAsStringAsync().Result;
-            var rgbb = JsonConvert.DeserializeObject<ARGBB>(responseString);
+            var rgbb = await StringContentToData<ARGBB>(response);
             return rgbb;
         }
         public async Task<List<Color>> GetAllColors()
@@ -45,21 +44,29 @@ namespace TestNetCore2.Services
             var colorHistoryList = new List<ColorHistory>();
             foreach (var device in devices)
             {
-                HttpClient client = await GetHttpClient(device.Ip);
-                var result = await client.PostAsync("rgb", await DataToStringContent(color));
-                if (result.IsSuccessStatusCode)
+                try
                 {
-                    var colorHistory = new ColorHistory()
+                    HttpClient client = await GetHttpClient(device.Ip);
+                    var result = await client.PostAsync("rgb", await DataToStringContent(color));
+                    if (result.IsSuccessStatusCode)
                     {
-                        DeviceId = device.Id,
-                        Red = color.Red,
-                        Green = color.Green,
-                        Blue = color.Blue,
-                        Brightness = color.Brightness,
-                        Date = DateTime.Now
-                    };
-                    colorHistoryList.Add(colorHistory);
+                        var colorHistory = new ColorHistory()
+                        {
+                            DeviceId = device.Id,
+                            Red = color.Red,
+                            Green = color.Green,
+                            Blue = color.Blue,
+                            Brightness = color.Brightness,
+                            Date = DateTime.Now
+                        };
+                        colorHistoryList.Add(colorHistory);
+                    }
                 }
+                catch(Exception ex)
+                {
+
+                }
+
             }
             await dbContext.AddRangeAsync(colorHistoryList);
             await dbContext.SaveChangesAsync();

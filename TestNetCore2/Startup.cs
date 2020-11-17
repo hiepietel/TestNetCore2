@@ -1,3 +1,5 @@
+using Hangfire;
+using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using TestNetCore2.Jobs;
 using TestNetCore2.Services;
 using TestNetCore2.Services.IService;
 
@@ -19,7 +22,7 @@ namespace TestNetCore2
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            
+
         }
 
         public IConfiguration Configuration { get; }
@@ -31,10 +34,18 @@ namespace TestNetCore2
             ConnectionString = Configuration.GetValue<string>("db");
             services.AddDbContext<ApplicationContext>(c => c.UseSqlServer(ConnectionString, opt => opt.EnableRetryOnFailure(3)));
 
-#elif DEBUGMYSQL
+#elif (DEBUGMYSQL || RELEASEMYSQL)
             ConnectionString = Configuration.GetValue<string>("mysqldb");
             services.AddDbContext<ApplicationContext>(c => c.UseMySQL(ConnectionString));
 #endif
+            services.AddHangfire(configuration => configuration
+             .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+             .UseSimpleAssemblyNameTypeSerializer()
+             .UseRecommendedSerializerSettings()
+             .UseMemoryStorage());
+            services.AddHangfireServer();
+
+            
 
             services.AddControllersWithViews();
             services.AddSwaggerGen(c =>
@@ -44,7 +55,7 @@ namespace TestNetCore2
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IDeviceService, DeviceService>();
             services.AddTransient<IColorService, ColorService>();
-            services.AddTransient<ITempService, TempService>();
+            services.AddTransient<ITemperatureService, TemperatureService>();
             services.AddTransient<ICovidService, CovidService>();
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -66,7 +77,9 @@ namespace TestNetCore2
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseHangfireDashboard("/hangfire");
+            RecurringJob.AddOrUpdate<DeviceAliveJob>(x => x.Execute(), "0 * * * *");
+            RecurringJob.AddOrUpdate<TemperatureJob>(x => x.Execute(), "0 */10 * ? * *");
             app.UseHttpsRedirection();
             app.UseSwagger();
             app.UseSwaggerUI(c =>

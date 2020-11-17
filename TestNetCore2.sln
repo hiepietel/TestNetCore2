@@ -12,6 +12,7 @@ Global
 		Debug|Any CPU = Debug|Any CPU
 		DebugMySQL|Any CPU = DebugMySQL|Any CPU
 		Release|Any CPU = Release|Any CPU
+		ReleaseMySQL|Any CPU = ReleaseMySQL|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{25130A86-4CB4-48EC-9F58-152519F6FCA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -20,12 +21,16 @@ Global
 		{25130A86-4CB4-48EC-9F58-152519F6FCA2}.DebugMySQL|Any CPU.Build.0 = DebugMySQL|Any CPU
 		{25130A86-4CB4-48EC-9F58-152519F6FCA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25130A86-4CB4-48EC-9F58-152519F6FCA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25130A86-4CB4-48EC-9F58-152519F6FCA2}.ReleaseMySQL|Any CPU.ActiveCfg = ReleaseMySQL|Any CPU
+		{25130A86-4CB4-48EC-9F58-152519F6FCA2}.ReleaseMySQL|Any CPU.Build.0 = ReleaseMySQL|Any CPU
 		{FA8176F8-2F9F-4FB1-B56C-C699248B2D85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FA8176F8-2F9F-4FB1-B56C-C699248B2D85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA8176F8-2F9F-4FB1-B56C-C699248B2D85}.DebugMySQL|Any CPU.ActiveCfg = DebugMySQL|Any CPU
 		{FA8176F8-2F9F-4FB1-B56C-C699248B2D85}.DebugMySQL|Any CPU.Build.0 = DebugMySQL|Any CPU
 		{FA8176F8-2F9F-4FB1-B56C-C699248B2D85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA8176F8-2F9F-4FB1-B56C-C699248B2D85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA8176F8-2F9F-4FB1-B56C-C699248B2D85}.ReleaseMySQL|Any CPU.ActiveCfg = ReleaseMySQL|Any CPU
+		{FA8176F8-2F9F-4FB1-B56C-C699248B2D85}.ReleaseMySQL|Any CPU.Build.0 = ReleaseMySQL|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
